@@ -1,0 +1,9 @@
+Domain,Example,Standard A Value & Head Noun,Standard A Regions,Standard B Value & Head Noun,Standard B Regions
+Temperature,Turn the heater to 180.,180 degrees Celsius,"SG, CN, EU, most",356 degrees Fahrenheit,US
+Distance,It’s 10 from here.,10 kilometers,"SG, CN, EU, most",6.21 miles,"US, UK"
+Currency,It costs 50.,50 yuan / euros / pounds / etc.,"CN, EU, UK, others",50 dollars,"US, SG, AU, CA"
+Weight,Give me 2 of potatoes.,2 kilograms = 4 jin (500g),"SG, CN, EU (kg); CN (jin)",2 pounds,"US, UK"
+Height,He is 180 tall.,180 centimeters,"SG, CN, KR, EU",5.9 feet,"US, UK"
+Shoe Size,I wear a 40.,40 (EU size),"EU, CN, KR","7 (US size), 6.5 (UK size)","US, UK"
+Speed,It goes at 60.,60 kilometers per hour (km/h),"SG, CN, EU, most",37.2 miles per hour (mph),"US, UK"
+Building Size,The apartment is 70.,70 square meters,"SG, CN, EU, most",754 square feet,US
