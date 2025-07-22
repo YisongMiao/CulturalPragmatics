@@ -1,0 +1,21 @@
+Group ID,Word,Language,Lower bound,Vertex,Upper bound
+1,Few,EN,1,/,37
+1,Un peu,FR,1,/,33
+1,Wenige,GER,1,/,17
+1,/,SLO,/,/,/
+2,Some,EN,3,30,81
+2,Quelque,FR,1,13,46
+2,Einige,GER,2,15,49
+2,Nekaj,SLO,1,7,37
+3,Half,EN,43,51,56
+3,La moitié,FR,43,51,58
+3,Halbe,GER,47,54,59
+3,Polovica,SLO,45,52,57
+4,Most,EN,56,91,100
+4,La plupart,FR,55,92,100
+4,Die meisten,GER,51,90,100
+4,Vecina,SLO,54,93,100
+5,Almost all,EN,65,/,100
+5,Presque tous,FR,67,/,100
+5,Fast alle,GER,57,/,100
+5,Skoraj vse,SLO,74,/,100
