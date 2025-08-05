@@ -7,6 +7,10 @@ We have following concepts:
 - Gradable adjectives: [unified/gradable_adjectives.csv](unified/gradable_adjectives.csv)
 - Quantifier: [unified/quantifier.csv](unified/quantifier.csv)
 - Missing_head_noun: [unified/metrics.csv](unified/metrics.csv)
+- Dollar Street (Family utility images in different countries): [unified/dollar_street.csv](unified/dollar_street.csv)
+- CROCUFID (Food images judged by different people): [unified/crocufid.csv](unified/crocufid.csv)
+
+🔧 Usage: All files are in the `unified` folder. They are all csv files. Simply perform a `country` & `concept` join to get the data. 
 
 | idx | Concept            | Value Type         | Example                   | Cultures/Languages        | # of Instances                   | Readiness      | Collected in Ori Lang or English?       |
 |-----|--------------------|--------------------|---------------------------|---------------------------|-----------------------------------|---------------|----------------------------------------|
