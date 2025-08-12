@@ -1,0 +1,11 @@
+ratio, file_name, most_likely_answer, possible_answer_2, incorrect_answer_1
+0.1, 1.png, wenige, einige, die meisten
+0.2, 2.png, einige, einige, die meisten
+0.3, 3.png, einige, wenige, die meisten
+0.4, 4.png, halbe, halbe, die meisten
+0.5, 5.png, halbe, einige, wenige
+0.6, 6.png, halbe, halbe, wenige
+0.7, 7.png, die meisten, halbe, wenige
+0.8, 8.png, fast alle, halbe, wenige
+0.9, 9.png, fast alle, halbe, wenige
+1.0, 10.png, fast alle, halbe, wenige

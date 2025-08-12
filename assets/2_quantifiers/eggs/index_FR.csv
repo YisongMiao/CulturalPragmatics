@@ -1,0 +1,11 @@
+ratio,file_name,most_likely_answer,possible_answer_2,incorrect_answer_1
+0.1,1.png,un peu,quelque,la plupart
+0.2,2.png,un peu,quelque,la plupart
+0.3,3.png,quelque,un peu,la plupart
+0.4,4.png,la moitié,la moitié,la plupart
+0.5,5.png,la moitié,quelque,un peu
+0.6,6.png,la moitié,la moitié,un peu
+0.7,7.png,la plupart,la moitié,un peu
+0.8,8.png,la plupart,presque tous,un peu
+0.9,9.png,presque tous,la plupart,un peu
+1.0,10.png,presque tous,la plupart,un peu

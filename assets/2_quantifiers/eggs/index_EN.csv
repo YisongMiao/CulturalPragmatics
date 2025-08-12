@@ -1,0 +1,12 @@
+ratio, file_name, most_likely_answer, possible_answer_2, incorrect_answer_1
+0.1, 1.png, few, some, most
+0.2, 2.png, few, some, most
+0.3, 3.png, some, few, most
+0.4, 4.png, some, half, most
+0.5, 5.png, half, some, few
+0.6, 6.png, half, most, few
+0.7, 7.png, most, half, few
+0.8, 8.png, almost all, most, few
+0.9, 9.png, almost all, most, few
+1.0, 10.png, almost all, most, some
+

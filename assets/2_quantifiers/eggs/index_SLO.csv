@@ -1,0 +1,11 @@
+ratio, file_name, most_likely_answer, possible_answer_2, incorrect_answer_1
+0.1, 1.png, nekaj, nekaj, vecina
+0.2, 2.png, nekaj, nekaj, vecina
+0.3, 3.png, nekaj, nekaj, vecina
+0.4, 4.png, polovica, polovica, vecina
+0.5, 5.png, polovica, nekaj, nekaj
+0.6, 6.png, polovica, vecina, nekaj
+0.7, 7.png, vecina, polovica, nekaj
+0.8, 8.png, skoraj vse, vecina, nekaj
+0.9, 9.png, skoraj vse, vecina, nekaj
+1.0, 10.png, skoraj vse, vecina, nekaj
