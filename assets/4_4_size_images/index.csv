@@ -1,0 +1,6 @@
+file_name, answer_m, unit_m, answer_i, unit_i, answer_incorrect
+room-5m2.png, 5, m2, 54, ft2, 100
+room-10m2.png, 10, m2, 108, ft2, 200
+room-30m2.png, 30, m2, 323, ft2, 600
+room-100m2.png, 100, m2, 1076, ft2, 2000
+room-1000m2.png, 1000, m2, 10764, ft2, 20000
