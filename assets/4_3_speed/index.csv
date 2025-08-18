@@ -1,0 +1,9 @@
+file_name, answer_m, unit_m, answer_i, unit_i, answer_incorrect
+human-4kmh.jpg, 4.0, kmh, 2.5, mph, 40
+bicycle-15kmh.jpg, 15.0, kmh, 9.3, mph, 150
+motorcycle-50kmh.jpg, 50.0, kmh, 31.0, mph, 500
+car-100kmh.jpg, 100.0, kmh, 62.0, mph, 200
+train-100kmh.jpg, 100.0, kmh, 62.0, mph, 200
+highspeedtrain-200kmh.jpg, 200.0, kmh, 124.0, mph, 400
+f1-300kmh.jpg, 300.0, kmh, 186.0, mph, 600
+airplane-800kmh.jpg, 800.0, kmh, 497.0, mph, 1600
