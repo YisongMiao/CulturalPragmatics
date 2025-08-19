@@ -55,11 +55,17 @@ def eval_concept(concept, dir_path):
         # if index < 15 or index > 20:
         #     continue
         if concept == "time":
-            question = f"What is the time in the image?\nA: {row['possible_answer_1']}\nB: {row['possible_answer_2']}\nPlease answer with only A or B."
+            question = f"I am showing you an image of a clock. Please answer the question based on the image. Question: What is the time in the image? There are two possible options, please answer with only A or B. \nA: {row['possible_answer_1']}\nB: {row['possible_answer_2']}\nAnswer: "
         if concept == "price":
-            question = f"What is the price of the item in the image?\nA: {row['answer_u']} {row['unit_u']}\nB: {row['answer_r']} {row['unit_r']}\nPlease answer with only A or B."
+            question = f"I am showing you an image of a product. Please answer the question based on the image.\nQuestion: What is the price of the product? There are two possible options, please answer with only A or B. \nA: {row['answer_u']} {row['unit_u']}\nB: {row['answer_r']} {row['unit_r']}\nAnswer: "
         if concept == "speed":
-            question = f"What is the speed in the image?\nA: {row['answer_m']} {row['unit_m']}\nB: {row['answer_i']} {row['unit_i']}\nPlease answer with only A or B."
+            question = f"I am showing you an image of a vehicle. Please answer the question based on the image. Question: What is the speed of the vehicle when it is moving normally? There are two possible options, please answer with only A or B. \nA: {row['answer_m']} {row['unit_m']}\nB: {row['answer_i']} {row['unit_i']}\nAnswer: "
+
+            # question = f"I am showing you an image of a vehicle. Please answer the question based on the image. Question: What is the speed of the vehicle when it is moving normally? There are two options, please answer with only A or B. \nA: {row['answer_i']} {row['unit_i']}\nB: {row['answer_m']} {row['unit_m']}\nAnswer: "
+        if concept == "temperature_camera":
+            question = f"I am showing you an image of a thermometer. Please answer the question based on the image. Question: What is the temperature shown? There are two possible options, please answer with only A or B. \nA: {row['answer_m']} °C\nB: {row['answer_i']} °F\nAnswer: "
+
+            question = f"I am at USA. I am showing you an image of a thermometer. Please answer the question based on the image. Question: What is the temperature shown? There are two possible options, please answer with only A or B. \nA: {row['answer_i']} °F\nB: {row['answer_m']} °C\nAnswer: "
 
         file_name = row['file_name']
         print(f"file_name: {file_name}")
@@ -76,8 +82,14 @@ if __name__ == "__main__":
     # parser.add_argument("--concept", type=str, default="time")
     # parser.add_argument("--dir_path", type=str, default="assets/1_time/googlegen")
 
-    parser.add_argument("--concept", type=str, default="price")
-    parser.add_argument("--dir_path", type=str, default="assets/4_5_price")
+    parser.add_argument("--concept", type=str, default="temperature_camera")
+    parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/camera")
+
+    # parser.add_argument("--concept", type=str, default="price")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_5_price")
+
+    # parser.add_argument("--concept", type=str, default="speed")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_3_speed")
 
 
     args = parser.parse_args()
