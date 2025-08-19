@@ -74,7 +74,16 @@ def get_answer(question, image_path):
     return answer, token_probs
 
 
-def eval_concept(concept, dir_path):
+def eval_concept(concept, dir_path, eval_type):
+
+    results_dict = {}
+
+    save_dir = f"results"
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_fp = f"{save_dir}/{concept}_{eval_type}.json"
+
+
     df = pd.read_csv(f"{dir_path}/index.csv")
 
     for index, row in df.iterrows():
@@ -88,7 +97,41 @@ def eval_concept(concept, dir_path):
                 f"A: {row['possible_answer_1']}\n"
                 f"B: {row['possible_answer_2']}\n"
                 f"Answer:"
+            )
+
+            if eval_type == 'loc_usa':
+                question = (
+                f"You are in the United States.\n"
+                f"You are shown an image of a clock. Answer the question based on the image.\n"
+                f"Question: What is the time in the image?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['possible_answer_1']}\n"
+                f"B: {row['possible_answer_2']}\n"
+                f"Answer:"
+            )
+                
+            if eval_type == 'loc_thailand':
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a clock. Answer the question based on the image.\n"
+                    f"Question: What is the time in the image?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['possible_answer_1']}\n"
+                    f"B: {row['possible_answer_2']}\n"
+                    f"Answer:"
                 )
+            
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a clock. Answer the question based on the image.\n"
+                    f"Question: What is the time in the image?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['possible_answer_2']}\n"
+                    f"B: {row['possible_answer_1']}\n"
+                    f"Answer:"
+                )
+            
+
         if concept == "quantifiers_battery":
             question = (
                 f"You are shown an image of a battery. Answer the question based on the image.\n"
@@ -98,6 +141,38 @@ def eval_concept(concept, dir_path):
                 f"B: {row['possible_answer_2']}\n"
                 f"Answer:"
                 )
+        
+            if eval_type == 'loc_thailand':
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a clock. Answer the question based on the image.\n"
+                    f"Question: What is the time in the image?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['most_likely_answer']}\n"
+                    f"B: {row['possible_answer_2']}\n"
+                    f"Answer:"
+                )
+            
+            if eval_type == 'loc_usa':
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a clock. Answer the question based on the image.\n"
+                    f"Question: What is the time in the image?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['most_likely_answer']}\n"
+                    f"B: {row['possible_answer_2']}\n"
+                    f"Answer:"
+                )
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a clock. Answer the question based on the image.\n"
+                    f"Question: What is the time in the image?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['possible_answer_2']}\n"
+                    f"B: {row['most_likely_answer']}\n"
+                    f"Answer:"
+                )
+
         if concept == "quantifiers_eggs":
             question = (
                 f"You are shown an image of a box of eggs. Answer the question based on the image.\n"
@@ -106,6 +181,38 @@ def eval_concept(concept, dir_path):
                 f"A: {row['most_likely_answer']}\n"
                 f"B: {row['possible_answer_2']}\n"
                 f"Answer:"
+                )
+
+            if eval_type == 'loc_thailand':
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a box of eggs. Answer the question based on the image.\n"
+                    f"Question: How would you rate the level of eggs?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['most_likely_answer']}\n"
+                    f"B: {row['possible_answer_2']}\n"
+                    f"Answer:"
+                )
+            
+            if eval_type == 'loc_usa':
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a box of eggs. Answer the question based on the image.\n"
+                    f"Question: How would you rate the level of eggs?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['most_likely_answer']}\n"
+                    f"B: {row['possible_answer_2']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a box of eggs. Answer the question based on the image.\n"
+                    f"Question: How would you rate the level of eggs?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['possible_answer_2']}\n"
+                    f"B: {row['most_likely_answer']}\n"
+                    f"Answer:"
                 )
 
         if concept == "temperature_camera" or concept == "temperature_googlegen":
@@ -117,6 +224,39 @@ def eval_concept(concept, dir_path):
                 f"B: {row['answer_i']} {row['unit_i']}\n"
                 f"Answer:"
             )
+
+            if eval_type == 'loc_thailand':
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                    f"Question: What is the temperature reading shown in the thermometer?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'loc_usa':
+
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                    f"Question: What is the temperature reading shown in the thermometer?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                    f"Question: What is the temperature reading shown in the thermometer?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_i']} {row['unit_i']}\n"
+                    f"B: {row['answer_m']} {row['unit_m']}\n"
+                    f"Answer:"
+                )
         
 
         if concept == "distance":
@@ -128,6 +268,40 @@ def eval_concept(concept, dir_path):
                 f"B: {row['answer_i']} {row['unit_i']}\n"
                 f"Answer:"
                 )
+
+            if eval_type == 'loc_thailand':
+
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of two {row['object']}s. Answer the question based on the image.\n"
+                    f"Question: How far is between the two {row['object']}s?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'loc_usa':
+
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of two {row['object']}s. Answer the question based on the image.\n"
+                    f"Question: How far is between the two {row['object']}s?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of two {row['object']}s. Answer the question based on the image.\n"
+                    f"Question: How far is between the two {row['object']}s?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_i']} {row['unit_i']}\n"
+                    f"B: {row['answer_m']} {row['unit_m']}\n"
+                    f"Answer:"
+                )
         
         if concept == "speed":
             question = (
@@ -138,6 +312,40 @@ def eval_concept(concept, dir_path):
                 f"B: {row['answer_i']} {row['unit_i']}\n"
                 f"Answer:"
                 )
+            
+            if eval_type == 'loc_thailand':
+
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a vehicle. Answer the question based on the image.\n"
+                    f"Question: What is the speed of the vehicle when it is moving normally?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'loc_usa':
+
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a vehicle. Answer the question based on the image.\n"
+                    f"Question: What is the speed of the vehicle when it is moving normally?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a vehicle. Answer the question based on the image.\n"
+                    f"Question: What is the speed of the vehicle when it is moving normally?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_i']} {row['unit_i']}\n"
+                    f"B: {row['answer_m']} {row['unit_m']}\n"
+                    f"Answer:"
+                )
         
         if concept == "size":
             question = (
@@ -147,6 +355,40 @@ def eval_concept(concept, dir_path):
                 f"A: {row['answer_m']} {row['unit_m']}\n"
                 f"B: {row['answer_i']} {row['unit_i']}\n"
                 f"Answer:"
+                )
+
+            if eval_type == 'loc_thailand':
+
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a room. Answer the question based on the image.\n"
+                    f"Question: What is the size of the room?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'loc_usa':
+
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a room. Answer the question based on the image.\n"
+                    f"Question: What is the size of the room?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_m']} {row['unit_m']}\n"
+                    f"B: {row['answer_i']} {row['unit_i']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a room. Answer the question based on the image.\n"
+                    f"Question: What is the size of the room?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_i']} {row['unit_i']}\n"
+                    f"B: {row['answer_m']} {row['unit_m']}\n"
+                    f"Answer:"
                 )
         
         if concept == "price":
@@ -159,6 +401,38 @@ def eval_concept(concept, dir_path):
                 f"Answer:"
                 )
 
+            if eval_type == 'loc_thailand':
+                question = (
+                    f"You are in Thailand.\n"
+                    f"You are shown an image of a room. Answer the question based on the image.\n"
+                    f"Question: What is the size of the room?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_u']} {row['unit_u']}\n"
+                    f"B: {row['answer_r']} {row['unit_r']}\n"
+                    f"Answer:"
+                )
+            
+            if eval_type == 'loc_usa':
+                question = (
+                    f"You are in the United States.\n"
+                    f"You are shown an image of a product. Answer the question based on the image.\n"
+                    f"Question: What is the price of the product?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_u']} {row['unit_u']}\n"
+                    f"B: {row['answer_r']} {row['unit_r']}\n"
+                    f"Answer:"
+                )
+
+            if eval_type == 'flip':
+                question = (
+                    f"You are shown an image of a product. Answer the question based on the image.\n"
+                    f"Question: What is the price of the product?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_r']} {row['unit_r']}\n"
+                    f"B: {row['answer_u']} {row['unit_u']}\n"
+                    f"Answer:"
+                )
+
         file_name = row['file_name']
         print(f"file_name: {file_name}")
         print(f"question: {question}")
@@ -167,42 +441,38 @@ def eval_concept(concept, dir_path):
         print(token_probs)
         print("--------------------------------")
 
+        results_dict[file_name] = {
+            "question": question,
+            "answer": answer,
+            "token_probs": token_probs
+        }
+
+        with open(save_fp, "w") as f:
+            # The idea is to save the results every time we get a new answer. 
+            json.dump(results_dict, f, indent=4)
+            print(f"Saved to {save_fp}")
+
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--concept", type=str, default="time_googlegen")
-    # parser.add_argument("--dir_path", type=str, default="assets/1_time/googlegen")
+    concept_paths = {
+        "time_googlegen": "assets/1_time/googlegen",
+        "time_camera": "assets/1_time/camera",
+        "quantifiers_battery": "assets/2_quantifiers/battery",
+        "quantifiers_eggs": "assets/2_quantifiers/eggs", 
+        "distance": "assets/4_2_distance",
+        "speed": "assets/4_3_speed",
+        "size": "assets/4_4_size",
+        "temperature_camera": "assets/4_1_temperature/camera",
+        "temperature_googlegen": "assets/4_1_temperature/googlegen",
+        "price": "assets/4_5_price"
+    }
 
-    # parser.add_argument("--concept", type=str, default="time_camera")
-    # parser.add_argument("--dir_path", type=str, default="assets/1_time/camera")
+    parser.add_argument("--concept", type=str, default="time_googlegen")
 
-    # parser.add_argument("--concept", type=str, default="quantifiers_battery")
-    # parser.add_argument("--dir_path", type=str, default="assets/2_quantifiers/battery")
-
-    # parser.add_argument("--concept", type=str, default="quantifiers_eggs")
-    # parser.add_argument("--dir_path", type=str, default="assets/2_quantifiers/eggs")
-
-    # parser.add_argument("--concept", type=str, default="distance")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_2_distance")
-
-    # parser.add_argument("--concept", type=str, default="speed")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_3_speed")
-
-    # parser.add_argument("--concept", type=str, default="size")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_4_size")
-
-    # parser.add_argument("--concept", type=str, default="temperature_camera")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/camera")
-
-    # parser.add_argument("--concept", type=str, default="temperature_googlegen")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/googlegen")
-
-    parser.add_argument("--concept", type=str, default="price")
-    parser.add_argument("--dir_path", type=str, default="assets/4_5_price")
-
+    parser.add_argument("--eval_type", type=str, default="loc_thailand")
     
 
-
     args = parser.parse_args()
-    eval_concept(args.concept, args.dir_path)
+    eval_concept(args.concept, concept_paths[args.concept], args.eval_type)
