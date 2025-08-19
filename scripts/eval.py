@@ -4,13 +4,38 @@ import pandas as pd
 import json
 import argparse
 import math
-
+import base64
 
 def get_answer(question, image_path):
     # Encode image to base64
-    import base64
+    
     with open(image_path, "rb") as image_file:
-        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+        image_data = image_file.read()
+        # Check if image is larger than 1MB
+        if len(image_data) > 1024 * 1024:
+            from PIL import Image
+            import io
+            # Open image and reduce quality until size is under 1MB
+            img = Image.open(io.BytesIO(image_data))
+            quality = 95
+            while True:
+                buffer = io.BytesIO()
+                img.save(buffer, format='JPEG', quality=quality)
+                if len(buffer.getvalue()) <= 1024 * 1024:
+                    image_data = buffer.getvalue()
+                    break
+                quality -= 5
+                if quality < 5:
+                    raise Exception("Could not reduce image size enough")
+        encoded_image = base64.b64encode(image_data).decode('utf-8')
+    # Print image sizes and compression info
+    original_size = len(image_data) / 1024  # Convert to KB
+    final_size = len(encoded_image) * 3/4 / 1024  # Base64 encoding adds ~33% overhead, so multiply by 3/4
+    compression_rate = (1 - final_size/original_size) * 100 if original_size != final_size else 0
+    
+    print(f"Original size: {original_size:.1f}KB")
+    print(f"Final size: {final_size:.1f}KB") 
+    print(f"Compression rate: {compression_rate:.1f}%")
     
     response = openai.chat.completions.create(
         model="gpt-4.1",
@@ -28,10 +53,11 @@ def get_answer(question, image_path):
                 ]
             }
         ],
+        seed=42,
         temperature=0.0,
         logprobs=True,
-        max_tokens=10,
-        top_logprobs=2
+        max_tokens=1,
+        top_logprobs=10
     )
     
     answer = response.choices[0].message.content
@@ -54,18 +80,84 @@ def eval_concept(concept, dir_path):
     for index, row in df.iterrows():
         # if index < 15 or index > 20:
         #     continue
-        if concept == "time":
-            question = f"I am showing you an image of a clock. Please answer the question based on the image. Question: What is the time in the image? There are two possible options, please answer with only A or B. \nA: {row['possible_answer_1']}\nB: {row['possible_answer_2']}\nAnswer: "
-        if concept == "price":
-            question = f"I am showing you an image of a product. Please answer the question based on the image.\nQuestion: What is the price of the product? There are two possible options, please answer with only A or B. \nA: {row['answer_u']} {row['unit_u']}\nB: {row['answer_r']} {row['unit_r']}\nAnswer: "
+        if concept == "time_camera" or concept == "time_googlegen":
+            question = (
+                f"You are shown an image of a clock. Answer the question based on the image.\n"
+                f"Question: What is the time in the image?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['possible_answer_1']}\n"
+                f"B: {row['possible_answer_2']}\n"
+                f"Answer:"
+                )
+        if concept == "quantifiers_battery":
+            question = (
+                f"You are shown an image of a battery. Answer the question based on the image.\n"
+                f"Question: How much battery is left in the image?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['most_likely_answer']}\n"
+                f"B: {row['possible_answer_2']}\n"
+                f"Answer:"
+                )
+        if concept == "quantifiers_eggs":
+            question = (
+                f"You are shown an image of a box of eggs. Answer the question based on the image.\n"
+                f"Question: How would you rate the level of eggs?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['most_likely_answer']}\n"
+                f"B: {row['possible_answer_2']}\n"
+                f"Answer:"
+                )
+
+        if concept == "temperature_camera" or concept == "temperature_googlegen":
+            question = (
+                f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                f"Question: What is the temperature reading shown in the thermometer?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_m']} {row['unit_m']}\n"
+                f"B: {row['answer_i']} {row['unit_i']}\n"
+                f"Answer:"
+            )
+        
+
+        if concept == "distance":
+            question = (
+                f"You are shown an image of two {row['object']}s. Answer the question based on the image.\n"
+                f"Question: How far is between the two {row['object']}s?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_m']} {row['unit_m']}\n"
+                f"B: {row['answer_i']} {row['unit_i']}\n"
+                f"Answer:"
+                )
+        
         if concept == "speed":
-            question = f"I am showing you an image of a vehicle. Please answer the question based on the image. Question: What is the speed of the vehicle when it is moving normally? There are two possible options, please answer with only A or B. \nA: {row['answer_m']} {row['unit_m']}\nB: {row['answer_i']} {row['unit_i']}\nAnswer: "
-
-            # question = f"I am showing you an image of a vehicle. Please answer the question based on the image. Question: What is the speed of the vehicle when it is moving normally? There are two options, please answer with only A or B. \nA: {row['answer_i']} {row['unit_i']}\nB: {row['answer_m']} {row['unit_m']}\nAnswer: "
-        if concept == "temperature_camera":
-            question = f"I am showing you an image of a thermometer. Please answer the question based on the image. Question: What is the temperature shown? There are two possible options, please answer with only A or B. \nA: {row['answer_m']} °C\nB: {row['answer_i']} °F\nAnswer: "
-
-            question = f"I am at USA. I am showing you an image of a thermometer. Please answer the question based on the image. Question: What is the temperature shown? There are two possible options, please answer with only A or B. \nA: {row['answer_i']} °F\nB: {row['answer_m']} °C\nAnswer: "
+            question = (
+                f"You are shown an image of a vehicle. Answer the question based on the image.\n"
+                f"Question: What is the speed of the vehicle when it is moving normally?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_m']} {row['unit_m']}\n"
+                f"B: {row['answer_i']} {row['unit_i']}\n"
+                f"Answer:"
+                )
+        
+        if concept == "size":
+            question = (
+                f"You are shown an image of a room. Answer the question based on the image.\n"
+                f"Question: What is the size of the room?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_m']} {row['unit_m']}\n"
+                f"B: {row['answer_i']} {row['unit_i']}\n"
+                f"Answer:"
+                )
+        
+        if concept == "price":
+            question = (
+                f"You are shown an image of a product. Answer the question based on the image.\n"
+                f"Question: What is the price of the product?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_u']} {row['unit_u']}\n"
+                f"B: {row['answer_r']} {row['unit_r']}\n"
+                f"Answer:"
+                )
 
         file_name = row['file_name']
         print(f"file_name: {file_name}")
@@ -79,17 +171,37 @@ def eval_concept(concept, dir_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--concept", type=str, default="time")
+    # parser.add_argument("--concept", type=str, default="time_googlegen")
     # parser.add_argument("--dir_path", type=str, default="assets/1_time/googlegen")
 
-    parser.add_argument("--concept", type=str, default="temperature_camera")
-    parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/camera")
+    # parser.add_argument("--concept", type=str, default="time_camera")
+    # parser.add_argument("--dir_path", type=str, default="assets/1_time/camera")
 
-    # parser.add_argument("--concept", type=str, default="price")
-    # parser.add_argument("--dir_path", type=str, default="assets/4_5_price")
+    # parser.add_argument("--concept", type=str, default="quantifiers_battery")
+    # parser.add_argument("--dir_path", type=str, default="assets/2_quantifiers/battery")
+
+    # parser.add_argument("--concept", type=str, default="quantifiers_eggs")
+    # parser.add_argument("--dir_path", type=str, default="assets/2_quantifiers/eggs")
+
+    # parser.add_argument("--concept", type=str, default="distance")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_2_distance")
 
     # parser.add_argument("--concept", type=str, default="speed")
     # parser.add_argument("--dir_path", type=str, default="assets/4_3_speed")
+
+    # parser.add_argument("--concept", type=str, default="size")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_4_size")
+
+    # parser.add_argument("--concept", type=str, default="temperature_camera")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/camera")
+
+    # parser.add_argument("--concept", type=str, default="temperature_googlegen")
+    # parser.add_argument("--dir_path", type=str, default="assets/4_1_temperature/googlegen")
+
+    parser.add_argument("--concept", type=str, default="price")
+    parser.add_argument("--dir_path", type=str, default="assets/4_5_price")
+
+    
 
 
     args = parser.parse_args()
