@@ -91,8 +91,8 @@ def eval_concept(concept, dir_path, eval_type):
     df = pd.read_csv(f"{dir_path}/index.csv")
 
     for index, row in df.iterrows():
-        if index > 3:
-            continue
+        # if index > 3:
+        #     continue
         if concept == "time_camera" or concept == "time_googlegen":
             question = (
                 f"You are shown an image of a clock. Answer the question based on the image.\n"
@@ -173,6 +173,26 @@ def eval_concept(concept, dir_path, eval_type):
                     f"B: {row['answer_m']} {row['unit_m']}\n"
                     f"Answer:"
                 )
+            
+            if eval_type == 'distractor':
+                question = (
+                f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                f"Question: What is the temperature reading shown in the thermometer?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_m']} {row['unit_m']}\n"
+                f"B: {row['answer_incorrect']} {row['unit_m']}\n"
+                f"Answer:"
+            )
+                
+            if eval_type == 'distractor_flip':
+                question = (
+                f"You are shown an image of a thermometer. Answer the question based on the image.\n"
+                f"Question: What is the temperature reading shown in the thermometer?\n"
+                f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                f"A: {row['answer_incorrect']} {row['unit_m']}\n"
+                f"B: {row['answer_m']} {row['unit_m']}\n"
+                f"Answer:"
+            )
         
 
         if concept == "distance":
@@ -291,9 +311,9 @@ if __name__ == "__main__":
         "price": "assets/4_5_price"
     }
 
-    parser.add_argument("--concept", type=str, default="temperature_googlegen")
+    parser.add_argument("--concept", type=str, default="temperature_camera")
 
-    parser.add_argument("--eval_type", type=str, default="flip")
+    parser.add_argument("--eval_type", type=str, default="distractor")
     
 
     args = parser.parse_args()
