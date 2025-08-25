@@ -412,6 +412,17 @@ def eval_concept(concept, dir_path, eval_type):
                     f"Answer:"
                 )
             
+            if eval_type == 'loc_rwanda':
+                question = (
+                    f"You are in Rwanda.\n"
+                    f"You are shown an image of a room. Answer the question based on the image.\n"
+                    f"Question: What is the size of the room?\n"
+                    f"Choose only one option that best matches the image. Please answer with only A or B.\n"
+                    f"A: {row['answer_u']} {row['unit_u']}\n"
+                    f"B: {row['answer_r']} {row['unit_r']}\n"
+                    f"Answer:"
+                )
+
             if eval_type == 'loc_usa':
                 question = (
                     f"You are in the United States.\n"
@@ -469,9 +480,9 @@ if __name__ == "__main__":
         "price": "assets/4_5_price"
     }
 
-    parser.add_argument("--concept", type=str, default="time_googlegen")
+    parser.add_argument("--concept", type=str, default="price")
 
-    parser.add_argument("--eval_type", type=str, default="loc_thailand")
+    parser.add_argument("--eval_type", type=str, default="normal")
     
 
     args = parser.parse_args()
